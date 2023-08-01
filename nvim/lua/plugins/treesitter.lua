@@ -25,7 +25,6 @@ return {
         ---@type TSConfig
         opts = {
             ensure_installed = {
-                "arduino",
                 "bibtex",
                 "bash",
                 "c",
@@ -40,12 +39,8 @@ return {
                 "gitattributes",
                 "gitcommit",
                 "gitignore",
-                "go",
-                "graphql",
-                "groovy",
                 "html",
                 "http",
-                "htmldjango",
                 "javascript",
                 "java",
                 "jsonc",
@@ -62,14 +57,9 @@ return {
                 "ocaml_interface",
                 "passwd",
                 "python",
-                "php",
-                "query",
-                "ql",
                 "regex",
                 "rust",
-                "tsx",
                 "typescript",
-                "vue",
                 "vim",
                 "vimdoc",
                 "yaml",
@@ -115,8 +105,6 @@ return {
                     end
                 end
             end
-            vim.opt.foldmethod = "expr"
-            vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
             vim.opt.foldenable = false
         end,
     },

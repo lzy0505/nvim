@@ -7,16 +7,16 @@ return {
         "mfussenegger/nvim-dap-python",
     },
     keys = {
-        { '<F5>',      function() require 'telescope'.extensions.dap.configurations {} end },
+        { '<Leader>df',      function() require 'telescope'.extensions.dap.configurations {} end },
         { '<F8>',     function() require('dap').step_over() end },
         { '<F7>',     function() require('dap').step_into() end },
         { '<S-F8>',     function() require('dap').step_out() end },
-        { '<Leader>b', function() require('dap').toggle_breakpoint() end },
-        { '<Leader>B', function() require('dap').set_breakpoint() end },
-        { '<Leader>lp',
+        { '<Leader>db', function() require('dap').toggle_breakpoint() end },
+        { '<Leader>dB', function() require('dap').set_breakpoint() end },
+        { '<Leader>dl',
             function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end },
         { '<Leader>dr', function() require('dap').repl.open() end },
-        { '<Leader>dl', function() require('dap').run_last() end },
+        { '<Leader>dL', function() require('dap').run_last() end },
         {
             '<Leader>dh',
             function()
@@ -31,11 +31,11 @@ return {
             end,
             mode = { 'n', 'v' }
         },
-        { '<Leader>df', function()
+        { '<Leader>dF', function()
             local widgets = require('dap.ui.widgets')
             widgets.centered_float(widgets.frames)
         end },
-        { '<Leader>ds', function()
+        { '<Leader>dS', function()
             local widgets = require('dap.ui.widgets')
             widgets.centered_float(widgets.scopes)
         end },

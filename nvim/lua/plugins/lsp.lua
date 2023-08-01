@@ -122,13 +122,8 @@ return {
     {
         "neovim/nvim-lspconfig",
         cmd = { "Mason", "Neoconf" },
-        event = { "BufReadPost", "BufNewFile" },
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            {
-                "williamboman/mason.nvim",
-                build = { ":MasonUpdate", "" } -- :MasonUpdate updates registry contents
-            },
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig",
             "folke/neoconf.nvim",
@@ -204,18 +199,6 @@ return {
                 }
             })
             vim.opt.updatetime = 500
-            -- FIXME: not very useful
-            -- vim.api.nvim_create_autocmd(
-                -- "CursorHold",
-                -- {
-                    -- pattern = {"*"},
-                    -- callback = function()
-                        -- if not require("cmp").visible() then
-                            -- local status, err = pcall(function() vim.lsp.buf.hover({focusable=false}) end)
-                        -- end
-                    -- end
-                -- }
-            -- )
         end
     },
 }

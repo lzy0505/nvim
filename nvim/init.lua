@@ -6,21 +6,18 @@ vim.opt.undodir = '/tmp/nvim/undo'
 vim.opt.exrc = true
 
 -- 允许 options map
-vim.g.neovide_input_macos_alt_is_meta = true
+-- vim.g.neovide_input_macos_alt_is_meta = true
 vim.keymap.set("n", "bn", "<cmd>bNext<CR>")
 vim.keymap.set("n", "bp", "<cmd>bprevious<CR>")
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv")
 
-vim.keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zO')<CR>")
-vim.keymap.set("n", "za", "zM")
-vim.keymap.set("n", "zo>", "zO")
+-- vim.keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zO')<CR>")
+-- vim.keymap.set("n", "za", "zM")
+-- vim.keymap.set("n", "zo>", "zO")
 -- 导入数学符号map
 vim.cmd('source ~/.vimrc.unimap')
-
--- 设置字体
-vim.opt.guifont = "Hack:h15"
 
 
 if os.getenv("OS") == "Windows_NT" then

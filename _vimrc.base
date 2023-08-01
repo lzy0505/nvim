@@ -115,7 +115,7 @@ set noacd
 set cursorline
 
 " mapper
-let mapleader ="\\"
+let mapleader ="<space>"
 
 " 增强剪切板
 map <leader>y "*y
@@ -153,8 +153,3 @@ noremap <Down> <c-w>j
 noremap <Left> <c-w>h
 noremap <Right> <c-w>l
 
-if has('multi_byte_ime')
-    hi Cursor guifg=bg guibg=White gui=NONE
-    hi CursorIM guifg=NONE guibg=Skyblue gui=NONE
-    set iminsert=0 imsearch=0
-endif

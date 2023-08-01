@@ -184,7 +184,7 @@ return {
             })
 
             -- remove trailing whitespace with a keybinding
-            vim.keymap.set('n', '<Leader>w', require('whitespace-nvim').trim)
+            vim.keymap.set('n', '<Leader>fw', require('whitespace-nvim').trim)
         end
     }
 }
