@@ -8,16 +8,16 @@ return {
         },
     },
     keys = {
-        { '<Leader>ff', function() return require('telescope.builtin').find_files() end },
-        { '<Leader>fe', function() return require('telescope.builtin').live_grep end },
-        { "<Leader>\\", function() return require('telescope.builtin').buffers end },
-        { '<Leader>fr', function() return require('telescope.builtin').oldfiles end },
-        { '<Leader>fs', function()
+        { '<leader>ff', function() return require('telescope.builtin').find_files() end, desc = "[F]ile" },
+        { '<leader>fg', function() return require('telescope.builtin').live_grep end, desc = "[G]rep" },
+        { "<leader>bb", function() return require('telescope.builtin').buffers end, desc = "[B]uffers" },
+        { '<leader>fr', function() return require('telescope.builtin').oldfiles end, desc = "[R]ecents" },
+        { '<leader>fs', function()
             require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
                 winblend = 10,
                 previewer = false,
             })
-        end },
+        end, desc = "[S]earch" },
     },
     config = function ()
         require('telescope').setup{

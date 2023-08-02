@@ -1,34 +1,62 @@
 vim.cmd('source ~/.vimrc.base')
--- 允许关闭文件后 undo
+-- persistent undo
 vim.opt.undofile = true
 vim.opt.undodir = '/tmp/nvim/undo'
--- 允许在项目文件夹添加.nvim.lua
+-- per-project .nvim.lua
 vim.opt.exrc = true
 
--- 允许 options map
--- vim.g.neovide_input_macos_alt_is_meta = true
-vim.keymap.set("n", "bn", "<cmd>bNext<CR>")
-vim.keymap.set("n", "bp", "<cmd>bprevious<CR>")
+-- local leader
+vim.g.maplocalleader = ' '
+-- switch between buffers
+vim.keymap.set("n", "<leader>b<Tab>", ":Next<CR>", {desc = "[N]ext Buffer"})
+vim.keymap.set("n", "<leader>bn", ":Next<CR>", {desc = "[N]ext Buffer"})
+vim.keymap.set("n", "<leader>bp", ":previous<CR>", {desc = "[P]revious Buffer"})
 
+-- FIXME: ???
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv")
 
+-- better yank/paste
+vim.keymap.set ({"n", "v"}, "<leader>y", '"*y', {desc = "[Y]ank"})
+vim.keymap.set ({"n"}, "<leader>p", '"*p', {desc = "[P]aste"})
+vim.keymap.set ({"v"}, "p", '"_dhp', {desc = "[P]aste"})
+
+-- move to the end of words
+vim.keymap.set ({"n"}, "w", 'e')
+
+-- stay in VISUAL after indentaion
+vim.keymap.set ({"v"}, "<", '<gv')
+vim.keymap.set ({"v"}, ">", '>gv')
+
+-- select all
+vim.keymap.set ({"n", "v"}, "cmd-a", 'ggVG<CR>')
+-- save
+vim.keymap.set ({"n", "v"}, "cmd-s", ':w<CR>')
+
+-- FIXME ???
+-- cmap ww w !sudo tee %
+-- nmap gp '.
+
+-- FIXME: map all <c-w>? to <leader>w?.
+vim.keymap.set ({"n", "v"}, "<leader>w", '<C-w>')
+
+-- noremap <Up> <c-w>k 
+-- noremap <Down> <c-w>j
+-- noremap <Left> <c-w>h
+-- noremap <Right> <c-w>l
+
+
+-- folding shortcuts
 -- vim.keymap.set("n", "<space>", "@=((foldclosed(line('.')) < 0) ? 'zc' : 'zO')<CR>")
 -- vim.keymap.set("n", "za", "zM")
 -- vim.keymap.set("n", "zo>", "zO")
--- 导入数学符号map
+
+-- import math symbols map
 vim.cmd('source ~/.vimrc.unimap')
-
-
-if os.getenv("OS") == "Windows_NT" then
-    vim.opt.guifontwide = "YouYuan:h10.5:cGB2312"
-elseif not os.getenv("HOME") == '/Users' then
-    vim.opt.guifontwide = "WenQuanYi Micro Hei 11"
-end
 
 local is_ssh = os.getenv("SSH_CONNECTION") or os.getenv("SSH_CLIENT")
 if not is_ssh then
-    -- lazyvim 插件
+    -- lazyvim
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     if not vim.loop.fs_stat(lazypath) then
         vim.fn.system({
@@ -49,10 +77,4 @@ if not is_ssh then
         },
     }
     require("lazy").setup("plugins", opts)
-end
-
-if vim.g.neovide then
-    vim.g.neovide_cursor_animation_length = 0
-    vim.keymap.set('c', '<D-v>', '<C-r>+', {noremap = true})
-    vim.keymap.set('i', '<D-v>', '<Cmd>put +<CR>', {})
 end

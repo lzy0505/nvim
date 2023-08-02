@@ -87,18 +87,18 @@ set laststatus=2
 " allow to change buffer without saving
 set hidden
 
-" 当文件在外部被修改，自动更新该文件
+" autoread file
 set autoread
 
 " make sure our terminal use 256 color
 set termguicolors
 set t_Co=256
 
-" File encoding
+" file encoding
 set encoding=utf-8                                    " 设置gvim内部编码，默认不更改
 set fileencodings=utf-8,ucs-bom,gbk,cp936,latin-1     "设置支持打开的文件的编码
 
-" 默认在右边/下边打开新窗口
+" open new window
 set splitright
 set splitbelow
 
@@ -111,45 +111,8 @@ set matchtime=0
 " no autochchdir
 set noacd
 
-" 当前行高亮
+" highlight current line
 set cursorline
 
-" mapper
-let mapleader ="<space>"
-
-" 增强剪切板
-map <leader>y "*y
-vmap <leader>y "*y
-map <leader>p "*p
-
-" w为选择到这个单词结尾
-nmap w e
-
-" 缩进后保持v mode
-vmap < <gv
-vmap > >gv
-
-" 全选
-nmap <c-a> ggVG<CR>
-
-" 保存
-cmap W w
-cmap ww w !sudo tee %
-" 全选
-map <C-a> ggVG
-
-" paste 后不替换
-vmap p "_dhp
-
-nmap gp '.
-
-nmap <c-k> <c-w>k
-nmap <c-j> <c-w>j
-nmap <c-h> <c-w>h
-nmap <c-l> <c-w>l
-
-noremap <Up> <c-w>k
-noremap <Down> <c-w>j
-noremap <Left> <c-w>h
-noremap <Right> <c-w>l
-
+" mapleader
+let mapleader = "\<space>"

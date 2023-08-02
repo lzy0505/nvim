@@ -1,20 +1,10 @@
+-- map languages (compilers/builders) to LSP servers 
 local lang2server = {
-    clang = {
-        clangd = {},
-    },
-    venv = {
-        pyright = {},
-        jedi_language_server = {}
-    },
-    cargo = {
-        neocmake = {},
-    },
-    tsc = {
-        tsserver = {},
-    },
-    opam = {
-        ocamllsp = {},
-    },
+    clang = { clangd = {}, },
+    venv = { pyright = {}, jedi_language_server = {} },
+    cargo = { neocmake = {}, },
+    tsc = { tsserver = {}, },
+    opam = { ocamllsp = {}, },
 }
 local function command_exists(command)
     local handle = io.popen("command -v " .. command)
@@ -63,11 +53,9 @@ local servers = {
     },
     marksman = {},
     intelephense = {},
-    powershell_es = {},
     rust_analyzer = {},
-    sqlls = {},
     taplo = {},
-    texlab = {},
+    -- texlab = {},
     vimls = {},
     volar = {},
     yamlls = {},
@@ -139,66 +127,63 @@ return {
         },
         config = function()
             local on_attach = function(_, bufnr)
-                -- Enable completion triggered by <c-x><c-o>
-                local nmap = function(keys, func, desc)
-                    if desc then
-                        desc = 'LSP: ' .. desc
-                    end
-
-                    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-                end
-                nmap("gq", vim.diagnostic.goto_next, "[G]oto next diagnostic")
-                nmap('gi', goToImplementationOrDefinition, '[G]oto [I]mplementation')
-                nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-                nmap('<leader>rn', "<cmd>Lspsaga rename ++project<cr>", '[R]e[n]ame')
-                vim.keymap.set({ "v", "n" }, "=", function()
-                    vim.lsp.buf.format { async = true }
-                end, { desc = "[F]ormat code" })
-                nmap('K', "<cmd>Lspsaga hover_doc<CR>", 'Hover Documentation')
-                nmap'cmp_nvim_lsp'('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-                nmap('gd', require "telescope.builtin".lsp_definitions, '[G]oto [D]efinition')
-                -- nmap('gi', require "telescope.builtin".lsp_implementations, '[G]oto [I]mplementation')
-                nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-                nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-                nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-                nmap('<leader>wl', function()
-                    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                end, '[W]orkspace [L]ist Folders')
-                nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-                nmap('<leader>ca', "<cmd>Lspsaga code_action<CR>", '[C]ode [A]ction')
-                nmap('<leader>da', require "telescope.builtin".diagnostics, '[D]i[A]gnostics')
-                -- nmap('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-
+            -- Enable completion triggered by <c-x><c-o>
+            local nmap = function(keys, func, desc)
+                vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
             end
+            -- Shortcuts
+            -- goto
+            nmap('<leader>gn', vim.diagnostic.goto_next, "[G]oto [N]ext diagnostic")
+            nmap('<leader>gi', goToImplementationOrDefinition, '[G]oto [I]mplementation')
+            nmap('<leader>gd', require "telescope.builtin".lsp_definitions, '[G]oto [D]efinition')
+            nmap('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+            -- nmap'cmp_nvim_lsp'('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-            for lang, _servers in pairs(lang2server) do
-                if command_exists(lang) then
-                    for k,v in pairs(_servers) do
-                        servers[k] = v
-                    end
+            -- workspace
+            nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+            nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+            nmap('<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, '[W]orkspace [L]ist Folders')
+
+            -- utils
+            nmap('<leader>pr', "<cmd>Lspsaga rename ++project<cr>", '[P]roject [R]ename')
+            vim.keymap.set({ "v", "n" }, "=", function() vim.lsp.buf.format { async = true } end, { desc = "[F]ormat code" })
+            -- nmap('K', "<cmd>Lspsaga hover_doc<CR>", 'Hover Documentation')
+            -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+            -- nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+            -- nmap('<leader>ca', "<cmd>Lspsaga code_action<CR>", '[C]ode [A]ction')
+            -- nmap('<leader>da', require "telescope.builtin".diagnostics, '[D]i[A]gnostics')
+        end
+
+        for lang, _servers in pairs(lang2server) do
+            if command_exists(lang) then
+                for k,v in pairs(_servers) do
+                    servers[k] = v
                 end
             end
+        end
 
-            require("neoconf").setup()
-            require("neodev").setup()
-            require("fidget").setup()
-            require("lspsaga").setup()
-            require("mason").setup()
-            local capabilities = require('cmp_nvim_lsp').default_capabilities()
-            require("mason-lspconfig").setup({
-                automatic_installation = false,
-                ensure_installed = vim.tbl_keys(servers),
-                handlers = {
-                    function(server_name) -- default handler (optional)
-                        require("lspconfig")[server_name].setup {
-                            settings = servers[server_name],
-                            on_attach = on_attach,
-                            capabilities = capabilities,
-                        }
-                    end,
-                }
-            })
-            vim.opt.updatetime = 500
+        require("neoconf").setup()
+        require("neodev").setup()
+        require("fidget").setup()
+        require("lspsaga").setup()
+        require("mason").setup()
+        local capabilities = require('cmp_nvim_lsp').default_capabilities()
+        require("mason-lspconfig").setup({
+            automatic_installation = false,
+            -- install all LSP servers
+            ensure_installed = vim.tbl_keys(servers),
+            handlers = {
+                function(server_name) -- default handler (optional)
+                    require("lspconfig")[server_name].setup {
+                        settings = servers[server_name],
+                        on_attach = on_attach,
+                        capabilities = capabilities,
+                    }
+                end,
+            }
+        })
+        vim.opt.updatetime = 500
         end
     },
 }

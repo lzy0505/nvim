@@ -2,20 +2,17 @@ local ignore = {
     buftype = { "quickfix", "nofile", "help", 'neo-tree', "neo-tree-popup", "notify", "fidget", "terminal" },
     filetype = { "gitcommit", "gitrebase", "svn", "hgcommit", 'terminal', "quickfix", "Trouble", "qf", "Outline", "toggleterm" },
 }
-return {
-    -- 输入成对括号
-    {
-        "windwp/nvim-autopairs",
-        opts = {
-            enable_check_bracket_line = false,
-        },
+return { 
+    { "windwp/nvim-autopairs",
+      opts = {
+          enable_check_bracket_line = false,
+      },
     },
-    -- 打开文件时光标恢复原先的位置
-    {
-        "ethanholz/nvim-lastplace",
-        config = true,
+    -- restore the position of cursor when opening up files
+    { "ethanholz/nvim-lastplace",
+      config = true,
     },
-    -- 按s 后跳转到单词
+    -- jump to text
     {
         "folke/flash.nvim",
         event = "VeryLazy",
@@ -23,59 +20,60 @@ return {
         opts = {},
         -- stylua: ignore
         keys = {
-            { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-            {
-                "S",
-                mode = { "n", "o", "x" },
-                function() require("flash").treesitter() end,
-                desc =
-                "Flash Treesitter"
+            { "<leader>jf",
+                mode = { "n", "x", "o" },
+                function() require("flash").jump() end,
+                desc = "[F]lash" },
+            { "<leader>jF",
+              mode = { "n", "o", "x" },
+              function() require("flash").treesitter() end,
+              desc = "[F]lash Treesitter"
             },
-            {
-                "r",
-                mode = "o",
-                function() require("flash").remote() end,
-                desc =
-                "Remote Flash"
+            -- { "r",
+            -- mode = "o",
+            --  function() require("flash").remote() end,
+            --  desc = "Remote Flash"
+            -- },
+            { "<leader>js",
+              mode = { "c" },
+              function() require("flash").toggle() end,
+              desc = "Toggle Flash [S]earch"
             },
-            {
-                "R",
-                mode = { "o", "x" },
-                function() require("flash").treesitter_search() end,
-                desc =
-                "Treesitter Search"
-            },
-            {
-                "<c-s>",
-                mode = { "c" },
-                function() require("flash").toggle() end,
-                desc =
-                "Toggle Flash Search"
+            { "<leader>jS",
+              mode = { "o", "x" },
+              function() require("flash").treesitter_search() end,
+              desc = "Flash Treesitter [S]earch"
             },
         },
     },
-    -- 驼峰命名法的拼写检查
+    -- naming checker
     {
         "kamykn/spelunker.vim",
         config = function()
             vim.g.spelunker_check_type = 2
         end
     },
-    -- 输入 glow 命令渲染 markdown
-    {
-        "ellisonleao/glow.nvim",
-        config = true,
-    },
-    -- 目录树
+    -- rendering markdown
+    -- {
+    --   "ellisonleao/glow.nvim",
+    --    config = true,
+    -- },
+    -- neotree
     {
         "nvim-neo-tree/neo-tree.nvim",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+            -- "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
             "MunifTanjim/nui.nvim",
         },
+        keys = {
+            { "<leader>pt",
+                mode = { "n", "v" },
+                function() require("neo-tree").toggle() end,
+                desc = "[P]roject File [T]ree" },
+        },
         config = function()
-            vim.keymap.set({ "n", "v" }, "<F2>", [[<cmd>Neotree toggle<CR>]])
+            -- vim.keymap.set({ "n", "v" }, "<F2>", [[<cmd>Neotree toggle<CR>]])
             require("neo-tree").setup({
                 window = {
                     position = "left",
@@ -144,6 +142,16 @@ return {
     },
     {
         "s1n7ax/nvim-window-picker",
+        keys = {
+            { "<leader>wp",
+                mode = { "n" },
+                function()
+                    local window_number = require('window-picker').pick_window()
+                    if window_number then vim.api.nvim_set_current_win(window_number) end
+                end,
+                desc = "[W]indow [P]ick"
+            },
+        },
         config = function()
             require("window-picker").setup({
                 filter_rules = {
@@ -154,19 +162,27 @@ return {
                     }
                 }
             })
-            vim.keymap.set("n",
-                "<c-w>p",
-                function()
-                    local window_number = require('window-picker').pick_window()
-                    if window_number then vim.api.nvim_set_current_win(window_number) end
-                end
-            )
+            -- vim.keymap.set("n",
+            --   "<c-w>p",
+            --    function()
+            --       local window_number = require('window-picker').pick_window()
+            --        if window_number then vim.api.nvim_set_current_win(window_number) end
+            --    end,
+            -- )
         end
     },
-    -- 末尾去空格
+    -- trim whitespaces
     {
         'johnfrankmorgan/whitespace.nvim',
         event = "VeryLazy",
+        keys = {
+            -- TODO: add this to "="??
+            { "<leader>fw",
+                mode = { "n" },
+                function() require('whitespace-nvim').trim() end,
+                desc = " [T]rim Trailing Whitespaces"
+            },
+        },
         config = function()
             require('whitespace-nvim').setup({
                 -- configuration options and their defaults
@@ -183,8 +199,7 @@ return {
                 ignore_terminal = true,
             })
 
-            -- remove trailing whitespace with a keybinding
-            vim.keymap.set('n', '<Leader>fw', require('whitespace-nvim').trim)
+            -- vim.keymap.set('n', '<Leader>fw', require('whitespace-nvim').trim)
         end
     }
 }

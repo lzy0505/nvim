@@ -2,9 +2,9 @@ return {
     {
         "folke/persistence.nvim",
         keys = {
-            { "<leader>qs", [[<cmd>lua require("persistence").load()<cr>]] },
-            { "<leader>ql", [[<cmd>lua require("persistence").load({ last = true})<cr>]] },
-            { "<leader>qd", [[<cmd>lua require("persistence").stop()<cr>]] },
+            { "<leader>qs", function() require("persistence").load() end, desc = "???" },
+            { "<leader>ql", function() require("persistence").load({ last = true}) end , desc = "???" },
+            { "<leader>qd", function() require("persistence").stop() end , desc = "???" },
         },
         config = function()
             require("persistence").setup()
@@ -18,9 +18,22 @@ return {
             vim.o.timeoutlen = 300
         end,
         opts = {
-            -- your configuration comes here
-            -- or leave it empty to use the default settings
-            -- refer to the configuration section below
-        }
+            triggers_blacklist = {
+                i = { "j", "k" },
+                v = { "j", "k" },
+                c = { " " },
+            },
+        },
+        config = function()
+            require("which-key").register({
+                ["<leader>f"] = {name = "+[F]ile"},
+                ["<leader>b"] = {name = "+[B]uffer"},
+                ["<leader>w"] = {name = "+[W]indow"},
+                ["<leader>p"] = {name = "+[P]roject"},
+                ["<leader>j"] = {name = "+[J]ump"},
+                ["<leader>d"] = {name = "+[D]ebug"},
+                ["<leader>g"] = {name = "+[G]oto"},
+            })
+        end
     }
 }

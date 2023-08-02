@@ -55,7 +55,6 @@ return {
                 "markdown_inline",
                 "ocaml",
                 "ocaml_interface",
-                "passwd",
                 "python",
                 "regex",
                 "rust",
@@ -68,6 +67,7 @@ return {
             indent = { enable = true },
             incremental_selection = {
                 enable = true,
+                -- FIXME ???
                 keymaps = {
                     init_selection = "vv",
                     node_incremental = "vv",
