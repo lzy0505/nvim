@@ -7,6 +7,8 @@ return {
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-cmdline",
+        "L3MON4D3/LuaSnip",
+        "saadparwaiz1/cmp_luasnip",
     },
     config = function()
         local has_words_before = function()
@@ -16,11 +18,17 @@ return {
         end
         local cmp = require 'cmp'
         cmp.setup {
-            -- snippet = ,
+            snippet = {
+                -- REQUIRED - you must specify a snippet engine
+                expand = function(args)
+                    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                end,
+            },
             sources = cmp.config.sources {
                 { name = 'nvim_lsp' },
                 { name = 'path' },
                 { name = "buffer" },
+                { name = 'luasnip' }, -- For luasnip users.
             },
             -- shortcuts when the prompt window shows up
             mapping = cmp.mapping.preset.insert {

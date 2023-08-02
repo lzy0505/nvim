@@ -123,7 +123,6 @@ return {
             },
             "nvimdev/lspsaga.nvim",
             "hrsh7th/nvim-cmp",
-
         },
         config = function()
             local on_attach = function(_, bufnr)
